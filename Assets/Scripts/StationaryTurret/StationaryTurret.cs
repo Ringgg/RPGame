@@ -1,46 +1,105 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class StationaryTurret : MonoBehaviour 
+public class StationaryTurret : Living
 {
-	private GameObject gun;
-	private GameObject indicator;
-	public GameObject shell;
-	private Transform playerTransform;
-	private TurretStats stats;
+    private GameObject player;
+    private GameObject lookPosObj;
+    private SphereCollider sphereCollider;
 	private float timer;
+    private float playerTurretAngle;
+    [SerializeField] private float attackRadius;
+    private float rotateSpeed;
 
-	void Start() 
+	public override void Start() 
 	{
-		shell = (GameObject)Resources.Load("Shell", typeof(GameObject));
-		if (shell == null)
-			Debug.Log("Shell object is not properly assigned! At: StationaryTurret");
-		playerTransform = GameObject.FindGameObjectWithTag("Player").GetComponent<Transform>();
-		stats = GetComponent<TurretStats>();
+        //attackRadius = 20.0f; //in meters;
+        rotateSpeed = 15.0f; //in degrees/second
+
+		player = GameObject.FindGameObjectWithTag("Player");
+        weapon = GetComponent<ProjectileWeapon>();
+        sphereCollider = GetComponent<SphereCollider>();
+        lookPosObj = new GameObject();
+
+        lookPosObj.transform.SetParent(transform);
+        playerTurretAngle = XZAngleBetweenVectors(Vector3.forward, (transform.position - player.transform.position));
+        sphereCollider.radius = attackRadius;
+        base.Start();
 	}
 
 	void Update()
 	{
 		timer += Time.deltaTime;
-		transform.LookAt(playerTransform);
+        float newPlayerTurretAngle = XZAngleBetweenVectors(Vector3.forward, (transform.position - player.transform.position));
 
-		if (timer > stats.reloadSpeed) 
+        if (newPlayerTurretAngle <= playerTurretAngle + rotateSpeed &&
+            newPlayerTurretAngle >= playerTurretAngle - rotateSpeed)
+        {
+            transform.LookAt(player.transform, Vector3.up);
+        }
+        else
+        {
+            float distToPlayer = XZDistanceBetweenPoints(transform.position, player.transform.position);
+            
+            Vector3 lookPos = new Vector3(
+                                  distToPlayer * Mathf.Cos(newPlayerTurretAngle * Mathf.Deg2Rad),
+                                  player.transform.position.y,
+                                  distToPlayer * Mathf.Sin(newPlayerTurretAngle * Mathf.Deg2Rad));
+            lookPosObj.transform.position = lookPos;
+            
+            transform.LookAt(lookPosObj.transform, Vector3.up);
+        }
+
+        playerTurretAngle = newPlayerTurretAngle;
+
+		if (timer > weapon.stats.reloadSpeed) 
 		{
-			Shoot ();
+            ShootProjectile();
 			timer = 0.0f;
 		}
 	}
 
-			
-	public void InitGun(GameObject obj) {gun = obj;}
-	public void InitIndicator(GameObject obj) {indicator = obj;}
+    public override void Die()
+    {
+        base.Die();
+        Destroy(gameObject);
+    }
+        
 
-	private void Shoot()
-	{
-		GameObject spawnedShell;
-		spawnedShell = Instantiate(shell);
-		spawnedShell.transform.position = indicator.transform.position;
-		spawnedShell.transform.rotation = transform.rotation;
-		spawnedShell.GetComponent<Shell>().Init(stats.shellSpeed);
-	}
+    private float XZAngleBetweenVectors(Vector3 first, Vector3 second)
+    {
+        return Vector3.Angle(
+            new Vector3(
+                first.x, 
+                0.0f, 
+                first.z),
+            new Vector3(
+                second.x, 
+                0.0f,
+                second.z));
+    }
+
+    private float XZDistanceBetweenPoints(Vector3 first, Vector3 second)
+    {
+        return Vector3.Distance(
+            new Vector3(
+                first.x,
+                0.0f,
+                first.z),
+            new Vector3(
+                second.x,
+                0.0f,
+                second.z));
+    }
+
+    public void Activate()
+    {
+        GetComponent<Renderer>().material.color = Color.red;
+        timer = 0.0f;
+    }
+
+    public void Deactivate()
+    {
+        GetComponent<Renderer>().material.color = Color.gray;
+    }
 }

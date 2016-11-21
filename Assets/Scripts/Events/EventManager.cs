@@ -4,7 +4,8 @@ using System;
 public enum EventType
 {
     ActionButtonPressed,
-    JoinCrateEvent
+    JoinCrateEvent,
+    ShootProjectile
 }
 
 class ObjectEvent

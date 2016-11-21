@@ -4,6 +4,8 @@ using System.Collections;
 public class Living : MonoBehaviour
 {
     public bool canDie = true;
+    protected ProjectileWeapon weapon;
+    protected GameObject indicator;
 
     public float maxHp = 100.0f;
 
@@ -57,6 +59,7 @@ public class Living : MonoBehaviour
         if (damageEffect != null)  
             Instantiate(damageEffect, transform.position, damageEffect.transform.rotation);
         ChangeHP(-ammount);
+        Debug.Log(gameObject.name + " received " + ammount + " dmg!");
     }
 
     public virtual void HealDamage(float ammount)
@@ -89,4 +92,12 @@ public class Living : MonoBehaviour
         if (effect != null)
             Destroy(effect);
     }
+
+    public void ShootProjectile()
+    {
+        weapon.Init(indicator.transform.position);
+        weapon.Shoot();
+    }
+
+    public void InitIndicator(GameObject obj) {indicator = obj;}
 }
