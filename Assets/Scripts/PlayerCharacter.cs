@@ -39,22 +39,4 @@ public class PlayerCharacter : Living
     {
         EventManager.StopListening(EventType.ShootProjectile, ShootProjectile);
     }
-
-    void OnTriggerEnter(Collider col)
-    {
-        if (col.gameObject.tag == "Turret")
-        {
-            col.gameObject.GetComponent<StationaryTurret>().enabled = true;
-            col.gameObject.GetComponent<StationaryTurret>().Activate();
-        }
-    }
-
-    void OnTriggerExit(Collider col)
-    {
-        if (col.gameObject.tag == "Turret")
-        {
-            col.gameObject.GetComponent<StationaryTurret>().enabled = false;
-            col.gameObject.GetComponent<StationaryTurret>().Deactivate();
-        }
-    }
 }

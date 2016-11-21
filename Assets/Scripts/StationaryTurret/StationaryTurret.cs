@@ -102,4 +102,22 @@ public class StationaryTurret : Living
     {
         GetComponent<Renderer>().material.color = Color.gray;
     }
+
+    void OnTriggerEnter(Collider col)
+    {
+        if (col.gameObject.tag == "Player")
+        {
+            this.enabled = true;
+            this.Activate();
+        }
+    }
+
+    void OnTriggerExit(Collider col)
+    {
+        if (col.gameObject.tag == "Player")
+        {
+            this.enabled = false;
+            this.Deactivate();
+        }
+    }
 }
