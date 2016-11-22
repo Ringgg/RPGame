@@ -7,16 +7,13 @@ public class PlayerCharacter : Living
 
     public override void Start()
     {
-        weapon = GetComponent<ProjectileWeapon>();
         rb = GetComponent<Rigidbody>();
         respawnPosition = transform.position;
-        EventManager.StartListening(EventType.ShootProjectile, ShootProjectile);
         base.Start();
     }
 
     public override void Die()
     {
-        EventManager.StopListening(EventType.ShootProjectile, ShootProjectile);
         base.Die();
         rb.isKinematic = true;
         Invoke("Respawn", 1.0f);
@@ -29,14 +26,8 @@ public class PlayerCharacter : Living
         
     void Respawn()
     {
-        EventManager.StartListening(EventType.ShootProjectile, ShootProjectile);
         rb.isKinematic = false;
         SetHp(maxHp);
         transform.position = respawnPosition;
-    }
-
-    void OnDestroy()
-    {
-        EventManager.StopListening(EventType.ShootProjectile, ShootProjectile);
     }
 }

@@ -5,7 +5,7 @@ public enum EventType
 {
     ActionButtonPressed,
     JoinCrateEvent,
-    ShootProjectile
+    Shoot
 }
 
 class ObjectEvent

@@ -3,9 +3,9 @@ using System.Collections;
 
 public class Living : MonoBehaviour
 {
+    protected WeaponSystem weaponSystem;
+    protected Indicator indicator;
     public bool canDie = true;
-    protected ProjectileWeapon weapon;
-    protected GameObject indicator;
 
     public float maxHp = 100.0f;
 
@@ -31,6 +31,8 @@ public class Living : MonoBehaviour
     public virtual void Start()
     {
         hp = maxHp;
+        weaponSystem = GetComponentInChildren<WeaponSystem>();
+        indicator = GetComponentInChildren<Indicator>();
     }
 
     public virtual void Die()
@@ -92,12 +94,4 @@ public class Living : MonoBehaviour
         if (effect != null)
             Destroy(effect);
     }
-
-    public void ShootProjectile()
-    {
-        weapon.Init(indicator.transform.position);
-        weapon.Shoot();
-    }
-
-    public void InitIndicator(GameObject obj) {indicator = obj;}
 }

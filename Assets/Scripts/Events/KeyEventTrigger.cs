@@ -10,6 +10,6 @@ public class KeyEventTrigger : MonoBehaviour
         if (Input.GetKeyDown(keyCode))
             EventManager.TriggerEvent(eventType);
         if (Input.GetMouseButtonDown(0))
-            EventManager.TriggerEvent(EventType.ShootProjectile);
+            EventManager.TriggerEvent(EventType.Shoot);
 	}
 }
