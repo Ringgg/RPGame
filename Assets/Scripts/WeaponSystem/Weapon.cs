@@ -4,8 +4,6 @@ using System.Collections;
 public class Weapon : MonoBehaviour 
 {
     public string objName { get; private set; }
-    public float reloadTime;
-    public float[] damage = new float[2];
 
 	void Start () 
     {

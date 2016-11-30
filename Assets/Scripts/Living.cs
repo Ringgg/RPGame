@@ -1,11 +1,10 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class Living : MonoBehaviour
+public class Living : Entity
 {
     protected WeaponSystem weaponSystem;
     protected Indicator indicator;
-    public bool canDie = true;
 
     public float maxHp = 100.0f;
 
@@ -28,11 +27,13 @@ public class Living : MonoBehaviour
     public GameObject damageEffect; // disappears by itself
     public GameObject healOverTimeEffect; // deleted from script
 
-    public virtual void Start()
+    public override void Start()
     {
+        base.Start();
         hp = maxHp;
         weaponSystem = GetComponentInChildren<WeaponSystem>();
         indicator = GetComponentInChildren<Indicator>();
+        weaponSystem.activeWeapon.ChangeOrigin(indicator.position);
     }
 
     public virtual void Die()
@@ -45,7 +46,7 @@ public class Living : MonoBehaviour
     {
         hp = value;
 
-        if (canDie && hp == 0)
+        if (vulnerability.canDie && hp == 0)
             Die();
     }
 

@@ -18,8 +18,6 @@ public class StationaryTurret : Living
 		player = GameObject.FindGameObjectWithTag("Player");
         sphereCollider = GetComponent<SphereCollider>();
         sphereCollider.radius = attackRadius;
-
-        weaponSystem.activeWeapon.ChangeOrigin(indicator.position);
         prefabSpawning = GetComponentInChildren<SpawnPrefabWithForceContinously>();
 	}
 

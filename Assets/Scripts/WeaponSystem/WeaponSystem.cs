@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 public class WeaponSystem : MonoBehaviour 
 {
-    private Weapon[] weapons;
+    public Weapon[] weapons;
     public Weapon activeWeapon;
 
 	void Start () 

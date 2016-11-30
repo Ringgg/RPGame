@@ -1,14 +1,16 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+[RequireComponent (typeof (ActivationFrequency))]
 public class SpawnPrefabWithForce : MonoBehaviour 
 {
     public GameObject prefabObj;
     public float forceStrength;
+    protected ActivationFrequency activationFrequency;
 
-	void Start() 
+	protected virtual void Start() 
     {
-	    
+        activationFrequency = (ActivationFrequency) GetComponent(typeof (ActivationFrequency));
 	}
 
     protected virtual void SpawnPrefab()

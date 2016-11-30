@@ -7,9 +7,9 @@ public class PlayerCharacter : Living
 
     public override void Start()
     {
+        base.Start();
         rb = GetComponent<Rigidbody>();
         respawnPosition = transform.position;
-        base.Start();
     }
 
     public override void Die()
